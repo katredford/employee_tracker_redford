@@ -32,11 +32,18 @@ inquirer.prompt([
         // console.log(answer)
         if (answer.choice === 'View Departments'){
             viewDepartment()
-        } if (answer.choice === 'Add Department'){
-            addDepartment()
+        } 
+        if (answer.choice === 'View Roles'){
+            viewRoles()
         }
         if (answer.choice === 'View Employees'){
             viewEmployees()
+        }
+        if (answer.choice === 'Add Department'){
+            addDepartment()
+        }
+        if (answer.choice === 'Add Role'){
+            addRole()
         }
     });
 // diffirent fucntinos to do each of those commands find all EMp functino findallDept function
@@ -44,7 +51,19 @@ function viewDepartment(){
     connection.query('select * from departments', function(err, result) {
         console.table(result);
     })
-}
+};
+
+function viewRoles(){
+    connection.query('select * from roles', function(err, result) {
+        console.table(result);
+    })
+};
+
+function viewEmployees(){
+    connection.query('select * from employees', function(err, result) {
+        console.table(result);
+    })
+};
 
 function addDepartment(){
 inquirer.prompt([
@@ -60,5 +79,20 @@ inquirer.prompt([
     })
 });
 }
+
+function addRole(){
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'rolename',
+            message: "What's your role name",
+          },
+    ]).then(function(answer){
+        console.log(answer)
+        connection.query('insert into roles(name) values(?)', answer.rolename, function(err,result){
+            console.log(result)
+        })
+    });
+    }
 
 ///inside each of your fucntions do the actiona SQL queires!! connecection.quer('SELECT * FROM departments') y stuff 
