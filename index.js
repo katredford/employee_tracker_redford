@@ -45,6 +45,9 @@ inquirer.prompt([
         if (answer.choice === 'Add Role'){
             addRole()
         }
+        if (answer.choice === 'Add Employee'){
+            addEmployee()
+        }
     });
 // diffirent fucntinos to do each of those commands find all EMp functino findallDept function
 function viewDepartment(){
@@ -65,16 +68,16 @@ function viewEmployees(){
     })
 };
 
-function addDepartment(){
+function addEmployee(){
 inquirer.prompt([
     {
         type: 'input',
-        name: 'departmentname',
-        message: "What's your department name",
+        name: 'employeename',
+        message: "What's your employee name",
       },
 ]).then(function(answer){
     console.log(answer)
-    connection.query('insert into departments(name) values(?)', answer.departmentname, function(err,result){
+    connection.query('insert into employees(name) values(?)', answer.employeename, function(err,result){
         console.log(result)
     })
 });
@@ -87,12 +90,55 @@ function addRole(){
             name: 'rolename',
             message: "What's your role name",
           },
+
     ]).then(function(answer){
         console.log(answer)
-        connection.query('insert into roles(name) values(?)', answer.rolename, function(err,result){
+        connection.query('insert into roles(title) values(?)', answer.rolename, function(err,result){
             console.log(result)
+           
+            
+            })
+           
         })
-    });
-    }
-
+    };
+    
+   
+    function addDepartment(){
+        inquirer.prompt([
+            {
+                type: 'input',
+                name: 'departmentname',
+                message: "What's your department name",
+              },
+        ]).then(function(answer){
+            console.log(answer)
+            connection.query('insert into departments(name) values(?)', answer.departmentname, function(err,result){
+                console.log(result)
+            })
+        });
+        }
 ///inside each of your fucntions do the actiona SQL queires!! connecection.quer('SELECT * FROM departments') y stuff 
+
+// function addRole(){
+//     inquirer.prompt([
+//         {
+//             type: 'input',
+//             name: 'rolename',
+//             message: "What's your role name",
+//           },
+
+//           {
+//             type: 'input',
+//             name: 'salaryamount',
+//             message: "What's your salary?",
+//           },
+//     ]).then(function(answer){
+//         console.log(answer)
+//         connection.query('insert into roles(title, salary) values(?)', (answer.rolename, answer.salaryamount), function(err,result){
+//             console.log(result)
+           
+            
+//             })
+           
+//         })
+//     };
