@@ -77,7 +77,7 @@ inquirer.prompt([
       },
 ]).then(function(answer){
     console.log(answer)
-    connection.query('insert into employees(name) values(?)', answer.employeename, function(err,result){
+    connection.query('insert into employees(first_name) values(?)', answer.employeename, function(err,result){
         console.log(result)
     })
 });
@@ -91,18 +91,30 @@ function addRole(){
             message: "What's your role name",
           },
 
+          {
+            type: 'input',
+            name: 'salaryamount',
+            message: "What's your salary?",
+          },
+
+          {
+            type: 'input',
+            name: 'departmentid',
+            message: "What's your department id?",
+          },
     ]).then(function(answer){
         console.log(answer)
-        connection.query('insert into roles(title) values(?)', answer.rolename, function(err,result){
+        connection.query('insert into roles(title, salary, department_id) values(?,?)', [answer.rolename, answer.salaryamount], function(err,result){
             console.log(result)
+            console.log(err)
+            connection.query.promise('describe departments')
            
             
             })
-           
+            connection.query.promise('describe departments')
         })
     };
     
-   
     function addDepartment(){
         inquirer.prompt([
             {
@@ -119,26 +131,36 @@ function addRole(){
         }
 ///inside each of your fucntions do the actiona SQL queires!! connecection.quer('SELECT * FROM departments') y stuff 
 
-// function addRole(){
-//     inquirer.prompt([
-//         {
-//             type: 'input',
-//             name: 'rolename',
-//             message: "What's your role name",
-//           },
+function addRole(){
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'rolename',
+            message: "What's your role name",
+          },
 
-//           {
-//             type: 'input',
-//             name: 'salaryamount',
-//             message: "What's your salary?",
-//           },
-//     ]).then(function(answer){
-//         console.log(answer)
-//         connection.query('insert into roles(title, salary) values(?)', (answer.rolename, answer.salaryamount), function(err,result){
-//             console.log(result)
+          {
+            type: 'input',
+            name: 'salaryamount',
+            message: "What's your salary?",
+          },
+
+          {
+            type: 'input',
+            name: 'departmentid',
+            message: "What's your departmentid?",
+          },
+    ]).then(function(answer){
+        console.log(answer)
+        connection.query('insert into roles(title, salary) values(?,?)', [answer.rolename, answer.salaryamount], function(err,result){
+            console.log(result)
+            console.log(err)
+            if (answer.choice === 'View Departments'){
+                viewDepartment()
+            }
            
             
-//             })
+            })
            
-//         })
-//     };
+        })
+    };
