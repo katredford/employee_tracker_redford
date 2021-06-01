@@ -69,51 +69,81 @@ function viewEmployees(){
 };
 
 function addEmployee(){
+    connection.query('SELECT * FROM roles', function(err, rolesResults) {
+
+        var roles = []
+        for (let i = 0; i < rolesResults.length; i++) {
+            roles.push({name: rolesResults[i].title, value: rolesResults[i].id })
+        }
 inquirer.prompt([
     {
         type: 'input',
-        name: 'employeename',
+        name: 'firstname',
         message: "What's your employee name",
       },
+
+      {
+        type: 'input',
+        name: 'lastname',
+        message: "What's your employee name",
+      },
+
+      {
+        type: 'list',
+        name: 'roleid',
+        message: "What's your department id?",
+        choices: roles
+    },
 ]).then(function(answer){
     console.log(answer)
-    connection.query('insert into employees(first_name) values(?)', answer.employeename, function(err,result){
+    connection.query('insert into employees(first_name, last_name, role_id) values(?,?,?)', [answer.firstname, answer.lastname, answer.roleid], function(err,result){
         console.log(result)
     })
+
+})
 });
 }
 
 function addRole(){
-    inquirer.prompt([
-        {
-            type: 'input',
-            name: 'rolename',
-            message: "What's your role name",
-          },
 
-          {
-            type: 'input',
-            name: 'salaryamount',
-            message: "What's your salary?",
-          },
+    connection.query('SELECT * FROM departments', function(err, deptResults) {
 
-          {
-            type: 'input',
-            name: 'departmentid',
-            message: "What's your department id?",
-          },
-    ]).then(function(answer){
-        console.log(answer)
-        connection.query('insert into roles(title, salary, department_id) values(?,?)', [answer.rolename, answer.salaryamount], function(err,result){
-            console.log(result)
-            console.log(err)
-            connection.query.promise('describe departments')
-           
-            
+        var depts = []
+        for (let i = 0; i < deptResults.length; i++) {
+            depts.push({name: deptResults[i].name, value: deptResults[i].id })
+        }
+
+    
+      inquirer.prompt([
+            {
+                type: 'input',
+                name: 'rolename',
+                message: "What's your role name",
+            },
+
+            {
+                type: 'input',
+                name: 'salaryamount',
+                message: "What's your salary?",
+            },
+
+            {
+                type: 'list',
+                name: 'departmentid',
+                message: "What's your department id?",
+                choices: depts
+            },
+        ]).then(function(answer){
+            console.log(answer)
+            connection.query('insert into roles(title, salary, department_id) values(?,?, ?)', [answer.rolename, answer.salaryamount, answer.departmentid], function(err,result){
+                console.log(result)
+                console.log('errrrr',err)
             })
-            connection.query.promise('describe departments')
+                
         })
-    };
+
+    })
+};
     
     function addDepartment(){
         inquirer.prompt([
@@ -131,36 +161,4 @@ function addRole(){
         }
 ///inside each of your fucntions do the actiona SQL queires!! connecection.quer('SELECT * FROM departments') y stuff 
 
-function addRole(){
-    inquirer.prompt([
-        {
-            type: 'input',
-            name: 'rolename',
-            message: "What's your role name",
-          },
-
-          {
-            type: 'input',
-            name: 'salaryamount',
-            message: "What's your salary?",
-          },
-
-          {
-            type: 'input',
-            name: 'departmentid',
-            message: "What's your departmentid?",
-          },
-    ]).then(function(answer){
-        console.log(answer)
-        connection.query('insert into roles(title, salary) values(?,?)', [answer.rolename, answer.salaryamount], function(err,result){
-            console.log(result)
-            console.log(err)
-            if (answer.choice === 'View Departments'){
-                viewDepartment()
-            }
-           
-            
-            })
-           
-        })
-    };
+//     };
